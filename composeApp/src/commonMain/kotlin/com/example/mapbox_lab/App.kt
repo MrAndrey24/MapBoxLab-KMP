@@ -23,6 +23,8 @@ import mapboxlab.composeapp.generated.resources.compose_multiplatform
 @Preview
 fun App() {
     MaterialTheme {
+
+        Map
         var showContent by remember { mutableStateOf(false) }
         Column(
             modifier = Modifier
