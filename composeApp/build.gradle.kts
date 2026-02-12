@@ -30,11 +30,8 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
-//            implementation(libs.mapbox)
-//            implementation(libs.mapbox.compose)
-            implementation("com.mapbox.maps:android-ndk27:11.15.2")
-            implementation("com.mapbox.extension:maps-compose-ndk27:11.15.2")
-            implementation("org.chromium.net:cronet-api:119.6045.31")
+//            implementation("com.mapbox.maps:android-ndk27:11.15.2")
+//            implementation("com.mapbox.extension:maps-compose-ndk27:11.15.2")
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -45,6 +42,10 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+//            implementation(libs.mapbox)
+//            implementation(libs.mapbox.compose)
+            implementation("com.mapbox.maps:android-ndk27:11.15.2")
+            implementation("com.mapbox.extension:maps-compose-ndk27:11.15.2")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
