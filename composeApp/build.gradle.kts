@@ -30,8 +30,8 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
-//            implementation("com.mapbox.maps:android-ndk27:11.15.2")
-//            implementation("com.mapbox.extension:maps-compose-ndk27:11.15.2")
+            implementation(libs.mapbox.android)
+            implementation(libs.mapbox.compose.android)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -42,10 +42,6 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
-//            implementation(libs.mapbox)
-//            implementation(libs.mapbox.compose)
-            implementation("com.mapbox.maps:android-ndk27:11.15.2")
-            implementation("com.mapbox.extension:maps-compose-ndk27:11.15.2")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -63,6 +59,8 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+        manifestPlaceholders["MAPBOX_ACCESS_TOKEN"] =
+            (project.findProperty("MAPBOX_ACCESS_TOKEN") as String?) ?: ""
     }
     packaging {
         resources {
