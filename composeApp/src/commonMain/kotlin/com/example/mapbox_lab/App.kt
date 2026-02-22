@@ -1,48 +1,76 @@
 package com.example.mapbox_lab
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import org.jetbrains.compose.resources.painterResource
-
-import mapboxlab.composeapp.generated.resources.Res
-import mapboxlab.composeapp.generated.resources.compose_multiplatform
+import com.example.mapbox_lab.component.MapViewComponent
+import com.example.mapbox_lab.component.PermissionsRequester
+import com.example.mapbox_lab.component.getLocationTracker
+import com.example.mapbox_lab.model.PermissionRequest
+import com.example.shared.presentation.LocationViewModel
+import dev.icerock.moko.geo.compose.BindLocationTrackerEffect
+import dev.icerock.moko.permissions.Permission
+import dev.icerock.moko.permissions.location.LOCATION
+import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-@Preview
 fun App() {
+    val viewModel = koinViewModel<LocationViewModel>()
+    AppContent(viewModel = viewModel)
+}
+
+@Composable
+fun AppContent(viewModel: LocationViewModel) {
+    val coordinate by viewModel.coordinate.collectAsState()
+
     MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
-        Column(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .safeContentPadding()
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
-            }
-            AnimatedVisibility(showContent) {
-                val greeting = remember { Greeting().greet() }
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
+        Scaffold { innerPadding ->
+            PermissionsRequester(
+                permissions = listOf(
+                    PermissionRequest(
+                        permission = Permission.LOCATION,
+                        title = "Location",
+                        description = "To show user location",
+                        icon = Icons.Default.LocationOn
+                    )
+                ),
+                onAllPermissionsGranted = {
+                    println("All permissions granted!")
                 }
+            ) { controller ->
+
+                val locationTracker = remember(controller) {
+                    getLocationTracker(controller)
+                }
+
+                BindLocationTrackerEffect(locationTracker = locationTracker)
+
+                LaunchedEffect(locationTracker) {
+                    println("Starting location tracking...")
+                    viewModel.startTracking(locationTracker)
+                }
+
+                DisposableEffect(locationTracker) {
+                    onDispose {
+                        println("Stopping location tracking...")
+                        viewModel.stopTracking(locationTracker)
+                    }
+                }
+
+                MapViewComponent(
+                    modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
+                    coordinate = coordinate
+                )
             }
         }
     }

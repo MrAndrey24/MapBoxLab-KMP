@@ -61,6 +61,22 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.stdlib)
                 // Add KMP dependencies here
+
+                // KOin
+                implementation(project.dependencies.platform(libs.koin.bom))
+                implementation(libs.koin.core)
+                implementation(libs.koin.compose.viewmodel)
+
+                // Coroutine
+                implementation(libs.kotlinx.coroutines.core)
+
+                // DateTime
+                implementation(libs.kotlinx.datetime)
+
+                // Moko
+                implementation(libs.moko.permissions)
+                implementation(libs.moko.permissions.compose)
+                implementation(libs.moko.permissions.geo)
             }
         }
 
@@ -75,8 +91,8 @@ kotlin {
                 // Add Android-specific dependencies here. Note that this source set depends on
                 // commonMain by default and will correctly pull the Android artifacts of any KMP
                 // dependencies declared in commonMain.
-                implementation(libs.mapbox)
-                implementation(libs.mapbox.compose)
+                implementation(libs.mapbox.android)
+                implementation(libs.mapbox.compose.android)
             }
         }
 
