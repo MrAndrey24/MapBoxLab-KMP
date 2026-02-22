@@ -21,10 +21,11 @@ import dev.icerock.moko.geo.compose.BindLocationTrackerEffect
 import dev.icerock.moko.permissions.Permission
 import dev.icerock.moko.permissions.location.LOCATION
 import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun App() {
-    val viewModel: LocationViewModel = koinInject()
+    val viewModel = koinViewModel<LocationViewModel>()
     AppContent(viewModel = viewModel)
 }
 

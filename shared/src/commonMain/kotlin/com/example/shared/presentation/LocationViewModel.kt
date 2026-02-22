@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 class LocationViewModel(private val trackLocationUseCase: TrackUserLocationUseCase, private val stopTrackingUseCase: StopTrackingUseCase) : ViewModel() {
 
 //    Default coordinate
-    private val _coordinate = MutableStateFlow(Coordinate(9.9895775, 84.8931864))
+    private val _coordinate = MutableStateFlow(Coordinate(9.9895775, -84.8931864))
     val coordinate: StateFlow<Coordinate> = _coordinate.asStateFlow()
     private var trackingJob: Job? = null
 
